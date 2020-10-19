@@ -1,7 +1,8 @@
 import json
 import jwt
 import datetime
-from autenticacion import token_required #The token verification script
+import pymongo
+from autenticacion import token_required, verificar # The token verification script
 from flask import Flask, request
 
 private_key = b'''-----BEGIN RSA PRIVATE KEY-----
@@ -33,22 +34,35 @@ jg/3747WSsf/zBTcHihTRBdAv6OmdhV4/dD5YBfLAkLrd+mX7iE=
 -----END RSA PRIVATE KEY-----'''
 
 app = Flask(__name__)
+client = pymongo.MongoClient("mongodb://35.229.79.84:5000")
+db = client["Tokens"]
+collection = db["Scope"]
 
 @app.route('/token', methods=['POST'])
 def loginFunction():
-   userName = dict(request.json).get("username")
-   timeLimit= datetime.datetime.utcnow() + datetime.timedelta(minutes=30) #set limit for user
-   playload = {"user_id":userName,"exp":timeLimit}
-      
-   token_bytes = jwt.encode(playload, private_key, algorithm = 'RS256')
-   #token = token_bytes.decode()
-   return_data={
-        "error": "0",
-        "message": "Successful",
-        "token": token_bytes.decode('utf-8'),
-        "Elapse_time": f"{timeLimit}"
-   }
-   return app.response_class(response=json.dumps(return_data), mimetype='application/json')
+    idusr = request.args.get("id")
+    secret = request.args.get("secret")
+    myquery = {"idService":idusr}
+    x = collection.find(myquery)
+    
+    if (verificar(idusr,secret)==True):
+        timeLimit= datetime.datetime.utcnow() + datetime.timedelta(minutes=30) #set limit for user
+        playload = {"alg":"RS256",
+            "typ":"JWT",
+            "exp":timeLimit, 
+            "scope":dict(x[0]).get("scope")
+        }
+        
+        token_bytes = jwt.encode(playload, private_key, algorithm = 'RS256')
+        return_data={
+            "jwt": token_bytes.decode('utf-8'),
+        }
+        return app.response_class(response=json.dumps(return_data), mimetype='application/json')
+    else:
+        err = {
+            'error':"credenciales no validas"
+        }
+        return app.response_class(response=json.dumps(err), mimetype='application/json')
 
 @app.route('/anEndpoint',methods=['POST'])
 @token_required #Verify token decorator

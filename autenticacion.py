@@ -1,8 +1,13 @@
 import json
 import jwt
 from flask import Flask, request
+import pymongo
+
 
 flask_app = Flask(__name__)
+client = pymongo.MongoClient("mongodb://35.229.79.84:5000")
+db = client["Tokens"]
+collection = db["Scope"]
 
 public_key = b'''-----BEGIN PUBLIC KEY-----\n
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnzyis1ZjfNB0bBgKFMSv
@@ -15,14 +20,11 @@ MwIDAQAB
 -----END PUBLIC KEY-----'''
 def token_required(something):
     def wrap():
-        try:
-            token_passed = request.headers['TOKEN']
-            if request.headers['TOKEN'] != '' and request.headers['TOKEN'] != None:
+        try: 
+            token_passed = request.headers['Authorization'].split(" ")[1]
+            if request.headers['Authorization'] != '' and request.headers['Authorization'] != None:
                 try:
- 
-                    print(token_passed)
                     data = jwt.decode(token_passed,public_key,algorithms='RS256')
-                    print("AJKSHDAJSDLKAJSDKLJSD DESPUES DE DECODIFICAR")
                     return data
                 except jwt.exceptions.ExpiredSignatureError:
                     return_data = {
@@ -50,3 +52,16 @@ def token_required(something):
             return flask_app.response_class(response=json.dumps(return_data), mimetype='application/json'),500
 
     return wrap
+
+def verificar(idv,secret):
+    myquery = {"idService":idv}
+    x = collection.find(myquery)
+    idver=dict(x[0]).get("idService") 
+    secretver=dict(x[0]).get("Secret") 
+    if x!=[] and x!= None:
+        if(idv==idver and secret==secretver):
+            return True
+        else:
+            return False
+    else:
+        False
