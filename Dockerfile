@@ -5,7 +5,7 @@ FROM alpine
 # # Step 2 tell what you want to do
 
 RUN echo "**** install Python ****" && \
-    apk add --no-cache python3 && \
+    apk add py3-pip --no-cache python3 && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
     \
     echo "**** install pip ****" && \
