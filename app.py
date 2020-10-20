@@ -76,6 +76,6 @@ def aWebService():
 
 @app.route('/hola',methods=['GET'])
 def holaService():
-    return app.response_class(response=json.dumps({"mensaje":"hola"}}), mimetype='application/json'),200
+    return app.response_class(response=json.dumps({"mensaje":"hola"}), mimetype='application/json'),200
 if __name__ == "__main__":
     app.run(port=5003, debug=True)
