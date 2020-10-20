@@ -16,5 +16,6 @@ before_install:
     - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
        
 script:
-        - sudo docker-compose build
-        - sudo docker-compose up
+    - sudo docker build -t servertokens .
+    - sudo docker-compose build
+    - sudo docker-compose up
