@@ -35,7 +35,7 @@ jg/3747WSsf/zBTcHihTRBdAv6OmdhV4/dD5YBfLAkLrd+mX7iE=
 
 app = Flask(__name__)
 CORS(app)
-client = pymongo.MongoClient("mongodb://34.74.73.135:5000")
+client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["Tokens"]
 collection = db["Scope"]
 
