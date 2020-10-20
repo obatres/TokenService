@@ -35,7 +35,7 @@ jg/3747WSsf/zBTcHihTRBdAv6OmdhV4/dD5YBfLAkLrd+mX7iE=
 
 app = Flask(__name__)
 CORS(app)
-client = pymongo.MongoClient("mongodb://localhost:27017")
+client = pymongo.MongoClient("mongodb://mongosrv:27017")
 db = client["Tokens"]
 collection = db["Scope"]
 
@@ -75,12 +75,12 @@ def aWebService():
     return app.response_class(response=json.dumps(return_data), mimetype='application/json')
 
 
-@app.route('/host', methods=['GET'])
+@app.route('/', methods=['GET'])
 def index():
     res = {'Status': 'Successfully ' + 'request ok'}
     return Response(response=json.dumps(res),
                     status=200,
                     mimetype='application/json')
-                    
+
 if __name__ == "__main__":
-    app.run(port=5003, debug=True)
+    app.run(port=5001, debug=True)

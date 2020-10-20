@@ -6,5 +6,7 @@ services:
             - "5000:27017"
     servertokens:
         build: .
+        depends_on: 
+            - "mongosrv"
         ports:
-            - "5003:5003"
+            - "5001:5001"

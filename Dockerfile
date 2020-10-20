@@ -20,7 +20,7 @@ COPY ["app.py", "/app"]
 COPY ["autenticacion.py", "/app"]
 
 # Exposing an internal port
-EXPOSE 5003
+EXPOSE 5001
 
 
 # Step 4 set default commands
