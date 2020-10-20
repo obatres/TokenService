@@ -7,6 +7,6 @@ services:
     servertokens:
         build: .
         depends_on: 
-            - "mongosrv"
+            - mongosrv
         ports:
             - "5001:5001"
