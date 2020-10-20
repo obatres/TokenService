@@ -4,7 +4,7 @@ FROM alpine
 
 # # Step 2 tell what you want to do
 
-RUN apk add --no-cache python3-dev && pip3 install --upgrade pip
+RUN apk add py3-pip --no-cache python3-dev && pip3 install --upgrade pip
 
 # # Step 3 Configure a software
 # # Defining working directory
