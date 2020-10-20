@@ -14,7 +14,7 @@ WORKDIR /app
 COPY /requirements.txt /app
 
 RUN pip3 install -r requirements.txt
-RUN apk add gcc musl-dev python3-dev libffi-dev libressl-dev
+RUN apk add py-cryptography
 
 COPY ["app.py", "/app"]
 
