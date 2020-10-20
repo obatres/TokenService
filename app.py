@@ -3,7 +3,7 @@ import jwt
 import datetime
 import pymongo
 from autenticacion import token_required, verificar # The token verification script
-from flask import Flask, request
+from flask import Flask, request, Response, json
 from flask_cors import CORS
 private_key = b'''-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAnzyis1ZjfNB0bBgKFMSvvkTtwlvBsaJq7S5wA+kzeVOVpVWw
@@ -35,7 +35,7 @@ jg/3747WSsf/zBTcHihTRBdAv6OmdhV4/dD5YBfLAkLrd+mX7iE=
 
 app = Flask(__name__)
 CORS(app)
-client = pymongo.MongoClient("mongodb://localhost:5000")
+client = pymongo.MongoClient("mongodb://34.74.73.135:5000")
 db = client["Tokens"]
 collection = db["Scope"]
 
@@ -74,8 +74,11 @@ def aWebService():
         }
     return app.response_class(response=json.dumps(return_data), mimetype='application/json')
 
-@app.route('/hola',methods=['GET'])
+@app.route('/host',methods=['GET'])
 def holaService():
-    return app.response_class(response=json.dumps({"mensaje":"hola"}), mimetype='application/json'),200
+    res = {'Status': 'Successfully ' + 'request ok'}
+    return Response(response=json.dumps(res),
+                    status=200,
+                    mimetype='application/json')
 if __name__ == "__main__":
     app.run(port=5003, debug=True)

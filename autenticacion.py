@@ -5,7 +5,7 @@ import pymongo
 
 
 flask_app = Flask(__name__)
-client = pymongo.MongoClient("mongodb://localhost:5000")
+client = pymongo.MongoClient("mongodb://34.74.73.135:5000")
 db = client["Tokens"]
 collection = db["Scope"]
 
