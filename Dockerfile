@@ -4,15 +4,7 @@ FROM alpine
 
 # # Step 2 tell what you want to do
 
-RUN echo "**** install Python ****" && \
-    apk add py-pip --no-cache python && \
-    if [ ! -e /usr/bin/python ]; then ln -sf python /usr/bin/python ; fi && \
-    \
-    echo "**** install pip ****" && \
-    python -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip install --no-cache --upgrade pip setuptools wheel && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip /usr/bin/pip ; fi
+RUN apk add --no-cache python3-dev && pip3 install --upgrade pip
 
 # # Step 3 Configure a software
 # # Defining working directory
@@ -21,9 +13,7 @@ WORKDIR /app
 # # Copy everything which is present in my docker directory to working (/app)
 COPY /requirements.txt /app
 
-RUN pip install -r requirements.txt
-
-RUN pip install flask-cors
+RUN pip3 install -r requirements.txt
 
 COPY ["app.py", "/app"]
 
