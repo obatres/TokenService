@@ -4,7 +4,7 @@ import datetime
 import pymongo
 from autenticacion import token_required, verificar # The token verification script
 from flask import Flask, request
-
+from flask_cors import CORS
 private_key = b'''-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAnzyis1ZjfNB0bBgKFMSvvkTtwlvBsaJq7S5wA+kzeVOVpVWw
 kWdVha4s38XM/pa/yr47av7+z3VTmvDRyAHcaT92whREFpLv9cj5lTeJSibyr/Mr
