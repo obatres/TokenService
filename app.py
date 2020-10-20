@@ -34,6 +34,7 @@ jg/3747WSsf/zBTcHihTRBdAv6OmdhV4/dD5YBfLAkLrd+mX7iE=
 -----END RSA PRIVATE KEY-----'''
 
 app = Flask(__name__)
+CORS(app)
 client = pymongo.MongoClient("mongodb://mongosrv:27017")
 db = client["Tokens"]
 collection = db["Scope"]
