@@ -74,11 +74,13 @@ def aWebService():
         }
     return app.response_class(response=json.dumps(return_data), mimetype='application/json')
 
-@app.route('/host',methods=['GET'])
-def holaService():
+
+@app.route('/host', methods=['GET'])
+def index():
     res = {'Status': 'Successfully ' + 'request ok'}
     return Response(response=json.dumps(res),
                     status=200,
                     mimetype='application/json')
+                    
 if __name__ == "__main__":
     app.run(port=5003, debug=True)
