@@ -38,6 +38,7 @@ CORS(app)
 client = pymongo.MongoClient("mongodb://mongosrv:27017")
 db = client["Tokens"]
 collection = db["Scope"]
+Log = open("LogTokens.txt","w")
 
 @app.route('/token', methods=['POST'])
 def loginFunction():
@@ -58,11 +59,15 @@ def loginFunction():
         return_data={
             "jwt": token_bytes.decode('utf-8'),
         }
+        print("Token: ", str(return_data)," COD: 200;")
+        Log.write("Token: ", str(return_data)," COD: 200;"+"\n")
         return app.response_class(response=json.dumps(return_data), mimetype='application/json')
     else:
         err = {
             'error':"credenciales no validas"
         }
+        print("Token: ", str(err)," COD: 403;")
+        Log.write("Token: ", str(err)," COD: 403;"+"\n")
         return app.response_class(response=json.dumps(err), mimetype='application/json')
 
 @app.route('/anEndpoint',methods=['POST'])
