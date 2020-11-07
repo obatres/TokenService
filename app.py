@@ -5,6 +5,8 @@ import pymongo
 from autenticacion import token_required, verificar # The token verification script
 from flask import Flask, request, Response, json
 from flask_cors import CORS
+from datetime import datetime
+
 private_key = b'''-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAnzyis1ZjfNB0bBgKFMSvvkTtwlvBsaJq7S5wA+kzeVOVpVWw
 kWdVha4s38XM/pa/yr47av7+z3VTmvDRyAHcaT92whREFpLv9cj5lTeJSibyr/Mr
@@ -38,7 +40,7 @@ CORS(app)
 client = pymongo.MongoClient("mongodb://mongosrv:27017")
 db = client["Tokens"]
 collection = db["Scope"]
-Log = open("LogTokens.txt","w")
+
 
 @app.route('/token', methods=['POST'])
 def loginFunction():
@@ -59,15 +61,21 @@ def loginFunction():
         return_data={
             "jwt": token_bytes.decode('utf-8'),
         }
-        print("Token: ", str(return_data)," COD: 200;")
-        Log.write("Token: ", str(return_data)," COD: 200;"+"\n")
-        return app.response_class(response=json.dumps(return_data), mimetype='application/json')
+        now = datetime.now()
+        Log = open("LogTokens.txt","a")
+        print("Token: ", str(return_data)," COD: 201;")
+        Log.write(str(now)+" "+"Token: "+ str(return_data)+" COD: 201;"+"\n")
+        Log.close()
+        return app.response_class(response=json.dumps(return_data), mimetype='application/json'),201
     else:
         err = {
             'error':"credenciales no validas"
         }
+        now = datetime.now()
+        Log = open("LogTokens.txt","a")
         print("Token: ", str(err)," COD: 403;")
-        Log.write("Token: ", str(err)," COD: 403;"+"\n")
+        Log.write(str(now)+" "+"Token: "+ str(err)+" COD: 403;"+"\n")
+        Log.close()
         return app.response_class(response=json.dumps(err), mimetype='application/json')
 
 @app.route('/anEndpoint',methods=['POST'])
