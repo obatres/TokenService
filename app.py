@@ -5,7 +5,7 @@ import pymongo
 from autenticacion import token_required, verificar # The token verification script
 from flask import Flask, request, Response, json
 from flask_cors import CORS
-from datetime import datetime
+
 
 private_key = b'''-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAnzyis1ZjfNB0bBgKFMSvvkTtwlvBsaJq7S5wA+kzeVOVpVWw
@@ -61,7 +61,7 @@ def loginFunction():
         return_data={
             "jwt": token_bytes.decode('utf-8'),
         }
-        now = datetime.now()
+        now = datetime.datetime.now()
         Log = open("LogTokens.txt","a")
         print("Token: ", str(return_data)," COD: 201;")
         Log.write(str(now)+" "+"Token: "+ str(return_data)+" COD: 201;"+"\n")
@@ -71,7 +71,7 @@ def loginFunction():
         err = {
             'error':"credenciales no validas"
         }
-        now = datetime.now()
+        now = datetime.datetime.now()
         Log = open("LogTokens.txt","a")
         print("Token: ", str(err)," COD: 403;")
         Log.write(str(now)+" "+"Token: "+ str(err)+" COD: 403;"+"\n")
